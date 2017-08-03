@@ -30,12 +30,12 @@
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-//    __weak typeof(self) weakSelf = self;//(弱引用)
+    __weak typeof(self) weakSelf = self;//(弱引用)
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-//        __strong typeof(self) strongSelf = weakSelf;
+        __strong typeof(self) strongSelf = weakSelf;
         NSLog(@"MJrefresh --下拉刷新");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"testBlock" object:nil userInfo:@{@"Project":@"testNotificationBlock"}];
-        [self endrefresh];
+        [strongSelf endrefresh];
 
     }];
     [self.tableView.mj_header beginRefreshing];
@@ -65,19 +65,8 @@
 }
 
 - (void)endrefresh {
-    [self.tableView.mj_header endRefreshing];
+    !self.tableView.mj_header.isRefreshing ?: [self.tableView.mj_header endRefreshing];
 }
 
-//- (UITableView *)tableView {
-//    if (!_tableView) {
-//        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-//        [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
-//        _tableView.dataSource = self;
-//        _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-//            NSLog(@"refresh --- %p",self.view);
-//        }];
-//    }
-//    return _tableView;
-//}
 
 @end
